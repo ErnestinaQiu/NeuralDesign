@@ -44,7 +44,7 @@ def cal_lr(func, vars):
     lr = 2*round(1/max(eigenvals), 3)
     return lr
 
-def cal_lr_straight_line(func, vars, start_p):
+def cal_lr_straight_line(func, vars, start_p, A=None, debug=False):
     """ @func, @vars(tuple, or list, or array), @start_p(tuple, or list, or array) 
     eg: vars=(x, y), start_p=(1, 5)
     """
@@ -53,11 +53,17 @@ def cal_lr_straight_line(func, vars, start_p):
     for i in range(len(vars)):
         subs_pairs.append((vars[i], start_p[i]))
     gk = _gk.subs(subs_pairs)  #
-    pk = -gk
-    Ak = hessian(func, vars).subs(subs_pairs)
+    pk = -1*gk
+    if not A:
+        Ak = hessian(func, vars).subs(subs_pairs)
+    else:
+        Ak = A
     lr_numerator = gk.T*pk
     _lr_denominator = pk.T*Ak*pk
     lr_denomonator = _lr_denominator.subs(subs_pairs)
+    if debug:
+        print('gk.T: {}, pk: {}'.format(gk.T, pk))
+        print('pk.T: {}, Ak: {}, pk: {}'.format(pk.T, Ak, pk))
     lr = -round(np.sum(lr_numerator)/np.sum(lr_denomonator), 4)
     return lr
 
@@ -67,27 +73,35 @@ def show_implicity(func):
     ezplot(func)
     return None
 
-def conjungate_gradient_descent(func, vars, start_p, epsilon=0.001, max_turns=1000, beta_mode='F_R'):
+def conjungate_gradient_descent(func, vars, start_p, epsilon=0.001, max_turns=1000, beta_mode='F_R', A=None, debug=True):
     """ @func, only support square func, @vars, @start_p, @beta_mode, concludes 'H_S', 'F_R', 'P_R' 
     lr use the def cal_lr_straight_line
     """
     _gk = multi_diff(func, vars)
+    if not A:
+        A = hessian(func, vars)  # there will be no vars inside because it is square func
+    
     # g0
     subs_pairs_0 = get_subs_pairs(vars, start_p)
-    g0 = _gk.susb(subs_pairs_0)
+    g0 = _gk.subs(subs_pairs_0)
     del subs_pairs_0
-    lr_0 = cal_lr_straight_line(func=func, vars=vars, start_p=start_p)
+    lr_0 = cal_lr_straight_line(func=func, vars=vars, start_p=start_p, A=A, debug=debug)
+    print('lr_0: {}'.format(lr_0))
     p0 = -1*g0
+    if debug:
+        print('p0: {}'.format(p0))
     x_last = None
     x_cur = start_p
     x_next = x_cur + lr_0*p0
+    if debug:
+        print('x_next: {}'.format(x_next))
     pk_cur = p0
     pk_last = None
     lt_cur = lr_0
     gk_cur = g0
     lt_last = None
     count=0
-    while abs(x_next - x_cur) >= epsilon and count <= max_turns: 
+    while (abs(x_next[0] - x_cur[0]) >= epsilon or abs(x_next[1] - x_cur[1]) >= epsilon) and count <= max_turns: 
         x_last = x_cur
         x_cur = x_next
         x_next = None
@@ -95,21 +109,37 @@ def conjungate_gradient_descent(func, vars, start_p, epsilon=0.001, max_turns=10
         lt_last = lt_cur
         gk_last = gk_cur
         # construct beta_k
-        A = hessian(func, vars)  # there will be no vars inside because it is square func
-        lr_cur = cal_lr_straight_line(func=func, vars=vars, start_p=x_cur)
+        lr_cur = cal_lr_straight_line(func=func, vars=vars, start_p=x_cur, A=A, debug=debug)
+        if debug:
+            print('lr_cur: {}'.format(lr_cur))
         delta_gk_last = A*(x_cur-x_last)
         subs_pairs = get_subs_pairs(vars, x_cur)
         gk_cur = _gk.subs(subs_pairs)
         if beta_mode=='H_S':
-            beta_k = (delta_gk_last.T*gk_cur)/(delta_gk_last.T*pk_last)
+            numerator = delta_gk_last.T*gk_cur
+            denominator = delta_gk_last.T*pk_last
+            beta_k = numerator[0]/denominator[0]
         elif beta_mode=='F_R':
-            beta_k = (gk_cur.T*gk_cur)/(gk_last.T*gk_last)
+            # if debug:
+                # print('gk_cur:{}, gk_cur.T:{}, gk_last: {}, gk_last.T: {}'.format(gk_cur, gk_cur.T, gk_last, gk_last.T))
+            numerator = gk_cur.T*gk_cur
+            denominator = gk_last.T*gk_last
+            beta_k = numerator[0]/denominator[0]
         elif beta_mode=='P_R':
-            beta_k = (delta_gk_last.T*gk_cur)/(gk_last.T*gk_last)
+            numerator = delta_gk_last.T*gk_cur
+            denominator = gk_last.T*gk_last
+            beta_k = numerator[0]/denominator[0]
+        print('beta_k:{}, numerator: {}, denominator: {}'.format(beta_k, numerator, denominator))
         pk_cur = -1*gk_cur + beta_k * pk_last
+        print('pk_cur: {}'.format(pk_cur))
         x_next = x_cur+ lr_cur*pk_cur
+        count += 1
+        if debug:
+            print('--------  {}  -------'.format(count))
+            print('x_next: {}'.format(x_next))
     
-    if abs(x_next - x_cur) < epsilon:
+    euclid_dis = sp.Pow(sp.Pow(x_next[0]-x_cur[0], 2) + sp.Pow(x_next[1]-x_cur[1], 2), 0.5)
+    if euclid_dis <= epsilon:
         return {'convergence': True, 'point': x_next}
     else:
         return {'convergence': False, 'point': x_next}
@@ -161,4 +191,12 @@ if __name__ == '__main__':
     # x, y = sp.symbols('x, y')
     # f = sp.Pow(y-x, 4) + 8*x*y - x + y + 3
     
-    
+    ## conjungate_gradient_descent
+    x, y = sp.symbols('x, y')
+    vars = [x, y]
+    vec = sp.Matrix([[x], [y]])
+    A = sp.Matrix([[2, 1], [1, 2]])
+    f = 0.5*vec.T*A*vec
+    start_p = sp.Matrix([[0.8], [-0.25]])
+    ans = conjungate_gradient_descent(func=f, vars=vars, start_p=start_p, max_turns=3, beta_mode='F_R', A=A)
+    print(ans)
