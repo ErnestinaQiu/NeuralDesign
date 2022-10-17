@@ -8,10 +8,12 @@ using namespace std;
 
 int main()
 {
-	std::vector<double> a={0,1,2,3};
-	learning_rate l_r;
-	MatXXd R = l_r.get_R(a);
-	std::cout << "R: " << R << std::endl;
+	Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> mat{{1,1,1}, {0,1,1}, {0,0,-1}};
+	//learning_rate l_r;
+	//learning_rate l_r;
+	//RowVecXd eigen_values = l_r.get_upper_limit(mat);
+	std::cout << "eigen_values: " << mat.eigenvalues() << std::endl << "row_size: " << mat.eigenvalues().rows() << "  col_size: " << mat.eigenvalues().cols() << std::endl;
+
 }
 
 //int main()
