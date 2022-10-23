@@ -8,12 +8,13 @@ using namespace std;
 
 int main()
 {
-	Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> mat{{1,1,1}, {0,1,1}, {0,0,-1}};
-	//learning_rate l_r;
-	//learning_rate l_r;
-	//RowVecXd eigen_values = l_r.get_upper_limit(mat);
-	std::cout << "eigen_values: " << mat.eigenvalues() << std::endl << "row_size: " << mat.eigenvalues().rows() << "  col_size: " << mat.eigenvalues().cols() << std::endl;
-
+	MatXXd mat{{1,1,1}, {0,1,1}, {0,0,-1}};
+	learning_rate l_r;
+	double eigen_vals;
+	eigen_vals = l_r.get_upper_limit(mat);
+	//VecXcd eigen_vals;
+	//eigen_vals = mat.eigenvalues();
+	std::cout << "eigen_values: " << eigen_vals << std::endl;
 }
 
 //int main()

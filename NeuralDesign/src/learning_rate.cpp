@@ -20,15 +20,21 @@ MatXXd learning_rate::get_R(std::vector<double>& vec)
 	return R;
 }
 
-//RowVecXd learning_rate::get_upper_limit(MatXXd& R)
-//{
-//	learning_rate::R_eigenvalue(1, learning_rate::fea_dim) = R.eigenvalues();
-//	return learning_rate::R_eigenvalue;
-//}
-//
-//double learning_rate::get_lr(std::vector<double>& vec)
-//{
-//	MatXXd R = learning_rate::get_R(vec);
-//	RowVecXd eigenvalue= learning_rate::get_upper_limit(R);
-//	return 1;
-//}
+double learning_rate::get_upper_limit(MatXXd& R)
+{
+	VecXcd eigen_vals = R.eigenvalues(); 
+	//learning_rate::R_eigenvalue = eigen_vals;
+	double min_eigenval = 0;
+	for (int i = 0; i < eigen_vals.rows(); i++)
+	{
+		if (eigen_vals(i, 0).real() > min_eigenval) { min_eigenval = eigen_vals(i).real(); }
+	}
+	return min_eigenval;
+}
+
+double learning_rate::get_lr(std::vector<double>& vec)
+{
+	MatXXd R = learning_rate::get_R(vec);
+	double eigenvalue= learning_rate::get_upper_limit(R);
+	return 1;
+}
