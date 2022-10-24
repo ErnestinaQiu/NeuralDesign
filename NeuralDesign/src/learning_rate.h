@@ -16,7 +16,7 @@ public:
 	float lr;
 
 protected:
-	MatXXd get_R(std::vector<double>& vec);
+	MatXXd get_sin_R(std::vector<double>& vec);
 
 public:
 	learning_rate(){};
@@ -26,4 +26,6 @@ public:
 	double get_upper_limit(MatXXd& R);
 
 	double get_lr(std::vector<double>& vec);
+
+	MatXXd get_R(std::vector<std::vector<double>>& vects);
 };

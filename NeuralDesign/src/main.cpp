@@ -8,14 +8,30 @@ using namespace std;
 
 int main()
 {
-	MatXXd mat{{1,1,1}, {0,1,1}, {0,0,-1}};
-	learning_rate l_r;
-	double eigen_vals;
-	eigen_vals = l_r.get_upper_limit(mat);
+	std::vector<double> vec1{ 1,-1,-1 };
+	std::vector<double> vec2{ 1, 1,-1 };
+	std::vector<std::vector<double>> total_vec{ vec1, vec2 };
+	learning_rate lr;
+	MatXXd R = lr.get_R(total_vec);
+	std::cout << R << std::endl;
+}
+
+//int main()
+//{
+//	MatXXd mat{{1,1,1}, {0,1,1}, {0,0,-1}};
+//	MatXXd mat1{ {1,1,1}, {1,1,1}, {1,1,1} };
+//
+//	std::cout << mat + mat1 << std::endl;
+//	std::cout << mat1/2 << std::endl;
+
+
+	//learning_rate l_r;
+	//double eigen_vals;
+	//eigen_vals = l_r.get_upper_limit(mat);
 	//VecXcd eigen_vals;
 	//eigen_vals = mat.eigenvalues();
-	std::cout << "eigen_values: " << eigen_vals << std::endl;
-}
+	//std::cout << "eigen_values: " << eigen_vals << std::endl;
+//}
 
 //int main()
 //{
