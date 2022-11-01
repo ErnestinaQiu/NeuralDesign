@@ -31,9 +31,9 @@ double learning_rate::get_upper_limit(MatXXd& R)
 	return max_eigenval;
 }
 
-double learning_rate::get_lr(std::vector<double>& vec)
+double learning_rate::get_lr(std::vector<std::vector<double>>& vects)
 {
-	MatXXd R = this->get_sin_R(vec);
+	MatXXd R = this->get_R(vects);
 	double eigenvalue= this->get_upper_limit(R);
 	if (eigenvalue < 0) return 0;
 	double max_stable_lr = 1 / eigenvalue;
@@ -62,3 +62,4 @@ MatXXd learning_rate::get_R(std::vector<std::vector<double>>& vects)
 	total_R = total_R / vec_num;
 	return total_R;
 }
+

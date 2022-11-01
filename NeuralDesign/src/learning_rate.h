@@ -25,7 +25,7 @@ public:
 	
 	double get_upper_limit(MatXXd& R);
 
-	double get_lr(std::vector<double>& vec);
+	double get_lr(std::vector<std::vector<double>>& vects);
 
 	MatXXd get_R(std::vector<std::vector<double>>& vects);
 };

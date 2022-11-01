@@ -11,9 +11,11 @@ int main()
 	std::vector<double> vec1{ 1,-1,-1 };
 	std::vector<double> vec2{ 1, 1,-1 };
 	std::vector<std::vector<double>> total_vec{ vec1, vec2 };
-	learning_rate lr;
-	MatXXd R = lr.get_R(total_vec);
+	learning_rate l_r;
+	MatXXd R = l_r.get_R(total_vec);
 	std::cout << R << std::endl;
+	double lr = l_r.get_lr(total_vec);
+	std::cout << lr << std::endl;
 }
 
 //int main()
