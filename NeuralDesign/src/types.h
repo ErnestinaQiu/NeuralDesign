@@ -10,6 +10,7 @@ typedef Eigen::Matrix<double, 1, Eigen::Dynamic> RowVecXd;
 typedef Eigen::Matrix<double, Eigen::Dynamic, 1> VecXd;
 typedef Eigen::Matrix<std::complex<double>, Eigen::Dynamic, 1> VecXcd;
 
+
 class types
 {
 };

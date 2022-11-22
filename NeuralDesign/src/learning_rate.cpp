@@ -46,16 +46,25 @@ MatXXd learning_rate::get_R(std::vector<std::vector<double>>& vects)
 	MatXXd total_R;
 	for (int i = 0; i < vec_num; i++)
 	{	
-		std::cout << "i: " << i << std::endl;
+		if (debug)
+		{
+			std::cout << "i: " << i << std::endl;
+		}
 		std::vector<double> tmp_vec = vects[i];
 		for (int j = 0; j < tmp_vec.size(); j++)
 		{
 			std::cout << tmp_vec[j];
 		}
-		std::cout << " " << std::endl;
+		if (debug)
+		{
+			std::cout << " " << std::endl;
+		}
 		MatXXd tmp_r = this->get_sin_R(tmp_vec);
-		std::cout << "tmp_r " << std::endl;
-		std::cout << tmp_r << std::endl;
+		if (debug)
+		{
+			std::cout << "tmp_r " << std::endl;
+			std::cout << tmp_r << std::endl;
+		}
 		if (i == 0) { total_R = tmp_r; continue; }
 		else if (i != 0) { total_R += tmp_r; continue; }
 	}

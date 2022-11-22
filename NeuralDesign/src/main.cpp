@@ -3,20 +3,31 @@
 #include <vector>
 #include "types.h"
 #include "learning_rate.h"
+#include "Weights.h"
 
 using namespace std;
 
+/*test  */
 int main()
 {
-	std::vector<double> vec1{ 1,-1,-1 };
-	std::vector<double> vec2{ 1, 1,-1 };
-	std::vector<std::vector<double>> total_vec{ vec1, vec2 };
-	learning_rate l_r;
-	MatXXd R = l_r.get_R(total_vec);
-	std::cout << R << std::endl;
-	double lr = l_r.get_lr(total_vec);
-	std::cout << lr << std::endl;
+	Weights wei;
+	std::string const mode = "zeros";
+	MatXXd zero = wei.initiate_weights(mode, 2, 1);
+	std::cout << zero << std::endl;
 }
+
+/* test get_lr */
+//int main()
+//{
+//	std::vector<double> vec1{ 1,-1,-1 };
+//	std::vector<double> vec2{ 1, 1,-1 };
+//	std::vector<std::vector<double>> total_vec{ vec1, vec2 };
+//	learning_rate l_r;
+//	MatXXd R = l_r.get_R(total_vec);
+//	std::cout << R << std::endl;
+//	double lr = l_r.get_lr(total_vec);
+//	std::cout << lr << std::endl;
+//}
 
 //int main()
 //{
