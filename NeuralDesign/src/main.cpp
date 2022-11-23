@@ -4,17 +4,46 @@
 #include "types.h"
 #include "learning_rate.h"
 #include "Weights.h"
+#include "loss.h"
 
 using namespace std;
 
-/*test  */
-int main()
+/*test loss.get_LMS_gradient*/
+int  main()
 {
-	Weights wei;
-	std::string const mode = "zeros";
-	MatXXd zero = wei.initiate_weights(mode, 2, 1);
-	std::cout << zero << std::endl;
+	loss m_loss;
+	double target = -1;
+	double pred = 0;
+	std::string mode = "LMS";
+	std::vector<double> in_vec = {1,-1,-1};
+	double lr = 0.2;
+	RowVecXd grad = m_loss.get_LMS_gradient(target, pred, in_vec, lr);
+	RowVecXd grad_2 = m_loss.get_gradient(mode, target, pred, in_vec, lr);
+	std::cout << grad << std::endl;
+	std::cout << grad_2 << std::endl;
+
+
+	return 0;
 }
+
+/*test loss.get_loss*/
+//int main()
+//{
+//	loss m_loss;
+//	double target = -1;
+//	double pred = 0;
+//	double m_loss_value = m_loss.get_loss(target, pred);
+//	std::cout << m_loss_value << std::endl;
+//}
+
+/*test  */
+//int main()
+//{
+//	Weights wei;
+//	std::string const mode = "zeros";
+//	MatXXd zero = wei.initiate_weights(mode, 2, 1);
+//	std::cout << zero << std::endl;
+//}
 
 /* test get_lr */
 //int main()
