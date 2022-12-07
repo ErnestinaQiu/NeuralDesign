@@ -8,23 +8,36 @@
 
 using namespace std;
 
-/*test loss.get_LMS_gradient*/
-int  main()
+/* Test Weights::update_weights */
+int main()
 {
-	loss m_loss;
-	double target = -1;
-	double pred = 0;
-	std::string mode = "LMS";
-	std::vector<double> in_vec = {1,-1,-1};
+	std::string const alg_name="LMS";
+	MatXXd weights{0,0,0};
 	double lr = 0.2;
-	RowVecXd grad = m_loss.get_LMS_gradient(target, pred, in_vec, lr);
-	RowVecXd grad_2 = m_loss.get_gradient(mode, target, pred, in_vec, lr);
-	std::cout << grad << std::endl;
-	std::cout << grad_2 << std::endl;
-
-
-	return 0;
+	std::vector<double> targets = {-1};
+	std::vector<double> preds = {0};
+	std::vector<double> input = {1, -1, -1};
+	//Weights m_weights;
+	//MatXXd new_weights = m_weights.update_weights(alg_name, weights, lr, targets, preds, input);
+	//std::cout << new_weights << std::endl;
 }
+
+/*test loss.get_LMS_gradient*/
+//int  main()
+//{
+//	loss m_loss;
+//	double target = -1;
+//	double pred = 0;
+//	std::string mode = "LMS";
+//	std::vector<double> in_vec = {1,-1,-1};
+//	double lr = 0.2;
+//	RowVecXd grad = m_loss.get_LMS_gradient(target, pred, in_vec, lr);
+//	RowVecXd grad_2 = m_loss.get_gradient(mode, target, pred, in_vec, lr);
+//	std::cout << grad << std::endl;
+//	std::cout << grad_2 << std::endl;
+//	std::cout << typeid(grad).name() << std::endl;
+//	return 0;
+//}
 
 /*test loss.get_loss*/
 //int main()

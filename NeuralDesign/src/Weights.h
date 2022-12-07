@@ -23,6 +23,6 @@ public:
 	Weights(std::string const init_mode, int debug)
 		:mode(init_mode), debug(debug) {}
 	MatXXd initiate_weights(std::string const& mode, int const& feature_num, int const& row_num);
-	MatXXd Weights::update_weights(std::string const& alg_name, MatXXd weights, double lr, std::vector<double> targets, std::vector<double> preds, std::vector<double> input);
+	MatXXd update_weights(std::string const& alg_name, MatXXd weights, double lr, std::vector<double> targets, std::vector<double> preds, std::vector<double> input);
 	
 };
